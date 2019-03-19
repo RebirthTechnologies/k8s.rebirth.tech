@@ -1,0 +1,24 @@
+#cloud-config
+rancher:
+  resize_device: /dev/vda
+  dev: /dev/vda
+  autoformat: /dev/vda
+  console: debian
+
+  services:
+    rancher-server:
+      image: rancher/rancher-agent:v2.1.7
+      restart: unless-stopped
+      privileged: true
+      network_mode: host
+      ports:
+      - 80:80
+      - 443:443
+      # --etcd --controlplane --worker
+      command: --address awspublic --internal-address awslocal --server https://rancher.rebirth.tech --token zrldnfbfs98shnbtmkwqcrtqr445xqmzrw7sqjgnlmwxthgvnlw2k4 --etcd --controlplane
+      volumes:
+      - /etc/kubernetes:/etc/kubernetes
+      - /var/run:/var/run
+
+#--etcd --controlplane --address awspublic --internal-address awslocal
+#docker run -d --privileged --restart=unless-stopped --net=host -v /etc/kubernetes:/etc/kubernetes -v /var/run:/var/run rancher/rancher-agent:v2.1.7 --server https://rancher.rebirth.tech --token dhmb4nv2gnl87kbjq6zxlm2dzgch7nxv674rfdl7qd7pv882s2b7lq

@@ -1,0 +1,19 @@
+#cloud-config
+rancher:
+  resize_device: /dev/vda
+  dev: /dev/vda
+  autoformat: /dev/vda
+  console: debian
+
+  services:
+    rancher-server:
+      image: rancher/rancher:v2.1.7
+      restart: unless-stopped
+      ports:
+      - 80:80
+      - 443:443
+      command: --acme-domain rancher.rebirth.tech
+      volumes:
+      - rancher-data:/var/lib/rancher
+      - rancher-mysql-data:/var/lib/mysql
+      - rancher-mysql-log:/var/log/mysql
